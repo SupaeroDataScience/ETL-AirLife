@@ -24,14 +24,14 @@ def extract_airports():
         # TODO: Read the airports.csv file using pandas
         # The file is located at: data/airports.csv
         # Hint: Use pd.read_csv()
-        
+        df=pd.read_csv('data/airports.csv')
         # For now, return an empty DataFrame
-        df = pd.DataFrame()
+        #df = pd.DataFrame()
         
         # TODO: Print how many airports were loaded
         # Example: print(f"Loaded {len(df)} airports")
-        
-        print("⚠️  Airport extraction not yet implemented")
+        print(f"Loaded {len(df)} airports")
+        #print("⚠️  Airport extraction not yet implemented")
         return df
         
     except Exception as e:
@@ -63,26 +63,27 @@ def extract_flights():
         
         # TODO: Make the API request using requests.get()
         # Hint: response = requests.get(url, params=params, timeout=10)
-        
+        reponse=requests.get(url,params=params,timeout=10)
         # TODO: Check if the response is successful
         # Hint: Check response.status_code == 200
-        
+        check=reponse.status_code==200
         # TODO: Get the JSON data from the response
         # Hint: data = response.json()
-        
+        data=reponse.json()
         # TODO: Extract the 'states' data from the JSON
         # The API returns: {"time": 123456789, "states": [[aircraft_data], [aircraft_data], ...]}
         # Hint: states = data['states'] if data['states'] else []
-        
+        states = data['states'] if data['states'] else []
         # TODO: Convert to DataFrame
         # Hint: df = pd.DataFrame(states)
-        
+        df=pd.DataFrame(states)
+       
         # TODO: Print how many flights were found
         # Example: print(f"Found {len(df)} active flights")
-        
+        print(f"Found {len(df)} active flights")
         # For now, return empty DataFrame
-        print("⚠️  Flight extraction not yet implemented")
-        return pd.DataFrame()
+        # print("⚠️  Flight extraction not yet implemented")
+        return df
         
     except requests.exceptions.RequestException as e:
         print(f"❌ Network error fetching flight data: {e}")
