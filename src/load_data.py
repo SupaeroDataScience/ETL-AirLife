@@ -9,17 +9,13 @@ This module handles loading cleaned data into PostgreSQL database:
 
 import pandas as pd
 from sqlalchemy import create_engine, text
-import psycopg2
+import json
 
 # Database connection configuration
 
-DATABASE_CONFIG = {
-    'username': 'diogo.vieira',
-    'password': 'D1234567', 
-    'host': 'localhost',
-    'port': '5432',
-    'database': 'airlife_db'
-}
+with open('config.json', 'r') as f:
+    DATABASE_CONFIG = json.load(f)
+
 
 def get_connection_string():
     """Build PostgreSQL connection string"""
