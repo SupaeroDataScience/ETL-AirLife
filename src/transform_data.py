@@ -31,12 +31,15 @@ def clean_airports(airports_df):
     df = airports_df.copy()
     
     # TODO: Remove rows with missing latitude or longitude
+
     # Hint: Use .dropna(subset=['latitude', 'longitude'])
     df = df.dropna(subset=['latitude', 'longitude'])
+
     
     # TODO: Remove airports with invalid coordinates
     # Latitude should be between -90 and 90
     # Longitude should be between -180 and 180
+
     df = df[(df['latitude'] >= -90) & (df['latitude'] <= 90)]
     df = df[(df['longitude'] >= -180) & (df['longitude'] <= 180)]
     
@@ -45,6 +48,7 @@ def clean_airports(airports_df):
     
     # TODO: Convert altitude to numeric (handle non-numeric values)
     df['altitude'] = pd.to_numeric(df['altitude'], errors='coerce')
+
     
     # TODO: Print how many airports remain after cleaning
     print(f"After cleaning: {len(df)} airports remain")
@@ -89,6 +93,7 @@ def clean_flights(flights_df):
     df = flights_df.copy()
     
     # TODO: Assign column names to the DataFrame
+
     df.columns = expected_columns
     
     # TODO: Remove flights with missing coordinates
@@ -105,6 +110,7 @@ def clean_flights(flights_df):
     
     # TODO: Clean callsign (remove extra whitespace)
     df['callsign'] = df['callsign'].str.strip()
+
     
     # TODO: Print how many flights remain after cleaning
     print(f"After cleaning: {len(df)} flights remain")

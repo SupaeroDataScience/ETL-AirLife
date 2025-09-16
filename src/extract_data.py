@@ -25,6 +25,7 @@ def extract_airports():
         # The file is located at: data/airports.csv
         # Hint: Use pd.read_csv()
         df=pd.read_csv(os.path.join('data', 'airports.csv'))
+
         # For now, return an empty DataFrame
         # df = pd.DataFrame()
         
@@ -64,6 +65,7 @@ def extract_flights():
         print("Making API request... (this may take a few seconds)")
         
         # TODO: Make the API request using requests.get()
+
         response = requests.get(url, params=params, timeout=10)
         
         # TODO: Check if the response is successful
@@ -78,6 +80,7 @@ def extract_flights():
         
         # TODO: Convert to DataFrame
         df = pd.DataFrame(states)
+
         
         # TODO: Print how many flights were found
         print(f"Found {len(df)} active flights")

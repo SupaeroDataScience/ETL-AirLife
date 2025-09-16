@@ -40,12 +40,16 @@ def load_to_database(airports_df, flights_df):
     
     try:
         # TODO: Create SQLAlchemy engine
+
         engine = create_engine(connection_string)
+
         
         
         # TODO: Load airports data
         # Use pandas to_sql method to insert data
+
         airports_df.to_sql('airports', engine, if_exists='replace', index=False)
+
         # 
         # Parameters explanation:
         # - 'airports': table name in database
@@ -55,8 +59,10 @@ def load_to_database(airports_df, flights_df):
         
         # TODO: Load flights data (only if not empty)
         # Check if flights_df is not empty before loading
+
         if not flights_df.empty:
             flights_df.to_sql('flights', engine, if_exists='replace', index=False)
+
         
         # TODO: Print loading statistics
         print(f"✅ Loaded {len(airports_df)} airports to database")
@@ -86,6 +92,7 @@ def verify_data():
         engine = create_engine(connection_string)
 
         # TODO: Count airports in database
+
         airports_count = pd.read_sql("SELECT COUNT(*) as count FROM airports", engine)
         print(f"📊 Airports in database: {airports_count.iloc[0]['count']}")
         
@@ -104,6 +111,7 @@ def verify_data():
         if not sample_flights.empty:
             print("\n✈️  Sample flights:")
             print(sample_flights.to_string(index=False))
+
         
     except Exception as e:
         print(f"❌ Error verifying data: {e}")
