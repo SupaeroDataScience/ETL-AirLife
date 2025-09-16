@@ -23,14 +23,15 @@ def extract_airports():
     try:
         # TODO: Read the airports.csv file using pandas
         # The file is located at: data/airports.csv
-        
-        # For now, return an empty DataFrame
-        df = pd.DataFrame()
+
+        # Hint: Use pd.read_csv()
+        df=pd.read_csv('data/airports.csv')
         
         # TODO: Print how many airports were loaded
         # Example: print(f"Loaded {len(df)} airports")
-        
-        print("⚠️  Airport extraction not yet implemented")
+        count_invalid = df[df['name'].str.strip().str.contains("Invalid", case=False, na=False)].shape[0]
+        valid_airports = len(df)-count_invalid
+        print(f"Loaded {valid_airports} valid airports")
         return df
         
     except Exception as e:
@@ -61,22 +62,28 @@ def extract_flights():
         print("Making API request... (this may take a few seconds)")
         
         # TODO: Make the API request using requests.get()
+
+        response = requests.get(url, params=params, timeout=10)
         
         # TODO: Check if the response is successful
+        if response.status_code != 200:
+            print(f"❌ API request failed: {response.status_code}")
+            return pd.DataFrame()
         
         # TODO: Get the JSON data from the response
+        data = response.json()
         
         # TODO: Extract the 'states' data from the JSON
         # The API returns: {"time": 123456789, "states": [[aircraft_data], [aircraft_data], ...]}
+        states = data['states'] if data['states'] else []
         
         # TODO: Convert to DataFrame
+        df = pd.DataFrame(states)
         
         # TODO: Print how many flights were found
-        # Example: print(f"Found {len(df)} active flights")
+        print(f"Found {len(df)} active flights")
         
-        # For now, return empty DataFrame
-        print("⚠️  Flight extraction not yet implemented")
-        return pd.DataFrame()
+        return df
         
     except requests.exceptions.RequestException as e:
         print(f"❌ Network error fetching flight data: {e}")
