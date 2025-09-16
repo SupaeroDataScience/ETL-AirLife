@@ -31,7 +31,7 @@ def extract_airports():
         # TODO: Print how many airports were loaded
         print(f"Loaded {len(df)} airports")
         
-        print("⚠️  Airport extraction not yet implemented")
+        # print("⚠️  Airport extraction not yet implemented")
         return df
         
     except Exception as e:
@@ -87,8 +87,8 @@ def extract_flights():
         print(f"Found {len(df)} active flights")
 
         # For now, return empty DataFrame
-        print("⚠️  Flight extraction not yet implemented")
-        return pd.DataFrame
+        # print("⚠️  Flight extraction not yet implemented")
+        return df
         
     except requests.exceptions.RequestException as e:
         print(f"❌ Network error fetching flight data: {e}")
