@@ -14,8 +14,8 @@ import psycopg2
 # Database connection configuration
 
 DATABASE_CONFIG = {
-    'username': 'pedro',
-    'password': 'psqlpasswd', 
+    'username': 'diogo.vieira',
+    'password': 'D1234567', 
     'host': 'localhost',
     'port': '5432',
     'database': 'airlife_db'
