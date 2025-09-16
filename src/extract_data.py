@@ -31,7 +31,6 @@ def extract_airports():
         count_invalid = df[df['name'].str.strip().str.contains("Invalid", case=False, na=False)].shape[0]
         valid_airports = len(df)-count_invalid
         print(f"Loaded {valid_airports} valid airports")
-        print (df)
         return df
         
     except Exception as e:
