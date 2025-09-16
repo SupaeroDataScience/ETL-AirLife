@@ -12,10 +12,10 @@ from sqlalchemy import create_engine, text
 import psycopg2
 
 # Database connection configuration
-# TODO: Update these values with your actual database credentials
+
 DATABASE_CONFIG = {
-    'username': 'your_username',
-    'password': 'your_password', 
+    'username': 'pedro',
+    'password': 'psqlpasswd', 
     'host': 'localhost',
     'port': '5432',
     'database': 'airlife_db'
@@ -35,37 +35,24 @@ def load_to_database(airports_df, flights_df):
     """
     print("💾 Loading data to PostgreSQL database...")
     
-    # TODO: Create connection string using the function above
-    # connection_string = get_connection_string()
+    connection_string = get_connection_string()
     
     try:
-        # TODO: Create SQLAlchemy engine
-        # Hint: engine = create_engine(connection_string)
+        engine = create_engine(connection_string)
+                
+        # Load airports data
+        airports_df.to_sql('airports', engine, if_exists='replace', index=False)
         
-        print("⚠️  Database loading not yet implemented")
-        return
-        
-        # TODO: Load airports data
-        # Use pandas to_sql method to insert data
-        # Hint: airports_df.to_sql('airports', engine, if_exists='replace', index=False)
-        # 
-        # Parameters explanation:
-        # - 'airports': table name in database
-        # - engine: database connection
-        # - if_exists='replace': replace table if it exists (use 'append' to add to existing data)
-        # - index=False: don't include pandas row index as a column
-        
-        # TODO: Load flights data (only if not empty)
         # Check if flights_df is not empty before loading
-        # Hint: if not flights_df.empty:
-        #           flights_df.to_sql('flights', engine, if_exists='replace', index=False)
+        if not flights_df.empty:
+            flights_df.to_sql('flights', engine, if_exists='replace', index=False)
         
-        # TODO: Print loading statistics
-        # print(f"✅ Loaded {len(airports_df)} airports to database")
-        # if not flights_df.empty:
-        #     print(f"✅ Loaded {len(flights_df)} flights to database")
-        # else:
-        #     print("ℹ️  No flight data to load")
+        # Print loading statistics
+        print(f"✅ Loaded {len(airports_df)} airports to database")
+        if not flights_df.empty:
+            print(f"✅ Loaded {len(flights_df)} flights to database")
+        else:
+            print("ℹ️  No flight data to load")
         
     except Exception as e:
         print(f"❌ Error loading data to database: {e}")
@@ -73,7 +60,8 @@ def load_to_database(airports_df, flights_df):
         print("   - PostgreSQL is running")
         print("   - Database 'airlife_db' exists") 
         print("   - Username and password are correct")
-        print("   - Tables are created (run database_setup.sql)")
+        print("   - Tables are created (if not, run database_setup.sql)")
+
 
 def verify_data():
     """
@@ -84,31 +72,28 @@ def verify_data():
     connection_string = get_connection_string()
     
     try:
-        # TODO: Create SQLAlchemy engine
-        # engine = create_engine(connection_string)
+        engine = create_engine(connection_string)
         
-        print("⚠️  Data verification not yet implemented")
-        return
+        # Count airports in database
+        airports_count = pd.read_sql("SELECT COUNT(*) as count FROM airports", engine)
+        print(f"📊 Airports in database: {airports_count.iloc[0]['count']}")
         
-        # TODO: Count airports in database
-        # Hint: airports_count = pd.read_sql("SELECT COUNT(*) as count FROM airports", engine)
-        # print(f"📊 Airports in database: {airports_count.iloc[0]['count']}")
+        # Count flights in database  
+        flights_count = pd.read_sql("SELECT COUNT(*) as count FROM flights", engine)
+        print(f"📊 Flights in database: {flights_count.iloc[0]['count']}")
         
-        # TODO: Count flights in database  
-        # Hint: flights_count = pd.read_sql("SELECT COUNT(*) as count FROM flights", engine)
-        # print(f"📊 Flights in database: {flights_count.iloc[0]['count']}")
+        # Show sample airport data
+        sample_airports = pd.read_sql("SELECT name, city, country FROM airports LIMIT 3", engine)
+        print("\n📋 Sample airports:")
+        print('\tNOTE: This is a non-exhaustive view of the table; some columns have been omitted for clarity.')
+        print(sample_airports.to_string(index=False))
         
-        # TODO: Show sample airport data
-        # Hint: sample_airports = pd.read_sql("SELECT name, city, country FROM airports LIMIT 3", engine)
-        # print("\n📋 Sample airports:")
-        # print(sample_airports.to_string(index=False))
-        
-        # TODO: Show sample flight data (if any exists)
-        # Hint: Check if flights table has data first
-        # sample_flights = pd.read_sql("SELECT callsign, origin_country, altitude FROM flights LIMIT 3", engine)
-        # if not sample_flights.empty:
-        #     print("\n✈️  Sample flights:")
-        #     print(sample_flights.to_string(index=False))
+        # Show sample flight data (if any exists)
+        sample_flights = pd.read_sql("SELECT callsign, origin_country, altitude FROM flights LIMIT 3", engine)
+        if not sample_flights.empty:
+            print("\n✈️  Sample flights:")
+            print('\tNOTE: This is a non-exhaustive view of the table; some columns have been omitted for clarity.')
+            print(sample_flights.to_string(index=False))
         
     except Exception as e:
         print(f"❌ Error verifying data: {e}")
