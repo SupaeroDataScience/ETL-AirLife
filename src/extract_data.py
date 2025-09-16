@@ -23,6 +23,7 @@ def extract_airports():
     try:
         # TODO: Read the airports.csv file using pandas
         # The file is located at: data/airports.csv
+
         # Hint: Use pd.read_csv()
         df=pd.read_csv('data/airports.csv')
         
@@ -61,6 +62,7 @@ def extract_flights():
         print("Making API request... (this may take a few seconds)")
         
         # TODO: Make the API request using requests.get()
+
         response = requests.get(url, params=params, timeout=10)
         
         # TODO: Check if the response is successful
