@@ -14,8 +14,8 @@ import psycopg2
 # Database connection configuration
 # TODO: Update these values with your actual database credentials
 DATABASE_CONFIG = {
-    'username': 'your_username',
-    'password': 'your_password', 
+    'username': 'postgres',
+    'password': 'thdvASedvqlpap', 
     'host': 'localhost',
     'port': '5432',
     'database': 'airlife_db'
@@ -36,17 +36,19 @@ def load_to_database(airports_df, flights_df):
     print("💾 Loading data to PostgreSQL database...")
     
     # TODO: Create connection string using the function above
-    # connection_string = get_connection_string()
+    connection_string = get_connection_string()
     
     try:
         # TODO: Create SQLAlchemy engine
+        engine = create_engine(connection_string)
         
-        print("⚠️  Database loading not yet implemented")
-        return
+        # print("⚠️  Database loading not yet implemented")
+        
         
         # TODO: Load airports data
         # Use pandas to_sql method to insert data
-        # 
+        airports_df.to_sql('airports', engine, if_exists='replace', index=False)
+    
         # Parameters explanation:
         # - 'airports': table name in database
         # - engine: database connection
@@ -55,14 +57,16 @@ def load_to_database(airports_df, flights_df):
         
         # TODO: Load flights data (only if not empty)
         # Check if flights_df is not empty before loading
-        #           flights_df.to_sql('flights', engine, if_exists='replace', index=False)
+        if not flights_df.empty:
+            flights_df.to_sql('flights', engine, if_exists='replace', index=False)
         
         # TODO: Print loading statistics
-        # print(f"✅ Loaded {len(airports_df)} airports to database")
-        # if not flights_df.empty:
-        #     print(f"✅ Loaded {len(flights_df)} flights to database")
-        # else:
-        #     print("ℹ️  No flight data to load")
+        print(f"✅ Loaded {len(airports_df)} airports to database")
+        if not flights_df.empty:
+            print(f"✅ Loaded {len(flights_df)} flights to database")
+        else:
+            print("ℹ️  No flight data to load")
+        return
         
     except Exception as e:
         print(f"❌ Error loading data to database: {e}")
@@ -82,27 +86,31 @@ def verify_data():
     
     try:
         # TODO: Create SQLAlchemy engine
-        # engine = create_engine(connection_string)
+        engine = create_engine(connection_string)
         
-        print("⚠️  Data verification not yet implemented")
-        return
+        # print("⚠️  Data verification not yet implemented")
+        
         
         # TODO: Count airports in database
-        # print(f"📊 Airports in database: {airports_count.iloc[0]['count']}")
+        airports_count = pd.read_sql("SELECT COUNT(*) as count FROM airports", engine)
+        print(f"📊 Airports in database: {airports_count.iloc[0]['count']}")
         
         # TODO: Count flights in database  
-        # print(f"📊 Flights in database: {flights_count.iloc[0]['count']}")
+        flights_count = pd.read_sql("SELECT COUNT(*) as count FROM flights", engine)
+        print(f"📊 Flights in database: {flights_count.iloc[0]['count']}")
         
         # TODO: Show sample airport data
-        # print("\n📋 Sample airports:")
-        # print(sample_airports.to_string(index=False))
+        sample_airports = pd.read_sql("SELECT name, city, country FROM airports LIMIT 3", engine)
+        print("\n📋 Sample airports:")
+        print(sample_airports.to_string(index=False))
         
         # TODO: Show sample flight data (if any exists)
-        # sample_flights = pd.read_sql("SELECT callsign, origin_country, altitude FROM flights LIMIT 3", engine)
-        # if not sample_flights.empty:
-        #     print("\n✈️  Sample flights:")
-        #     print(sample_flights.to_string(index=False))
-        
+        # Hint: Check if flights table has data first
+        sample_flights = pd.read_sql("SELECT callsign, origin_country, altitude FROM flights LIMIT 3", engine)
+        if not sample_flights.empty:
+            print("\n✈️  Sample flights:")
+            print(sample_flights.to_string(index=False))
+        return
     except Exception as e:
         print(f"❌ Error verifying data: {e}")
 
